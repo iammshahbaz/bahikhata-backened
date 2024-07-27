@@ -3,13 +3,17 @@ const cors  = require("cors");
 const { connection } = require("./config/db");
 const { userRouter } = require("./routes/userRouters");
 const { UserModule } = require("./model/userModel");
+const { noteRouter } = require("./routes/noteRouters");
 require("dotenv").config();
 
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+
 app.use("/users",userRouter)
+app.use("/notes",noteRouter)
+
 
 app.get("/",async(req,res)=>{
     const user = await UserModule.find();
