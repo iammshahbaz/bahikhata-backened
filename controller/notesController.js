@@ -42,11 +42,15 @@ const getNotes = async (req, res) => {
     const { id } = req.params;
     // console.log(id);
     try {
-      await NoteModule.findByIdAndDelete({ _id: id });
-
-      return res.status(200).send({ msg: "note Delete successfully " });
+        const note = await NoteModule.findById(id);
+        if(note.userId === req.body.userId){
+      await NoteModule.findByIdAndDelete({ _id: id }, req.body);
+      return res.status(200).send({ msg: "Note deleted successfully " });
+        }else{
+            res.send({"msg":"you are not authorised"})
+        }
     } catch (error) {
-      return res.status(500).send({ msg: "Error Delete note", error: error });
+      return res.status(500).send({ msg: "Error deleting Note", error: error });
       console.log(error);
     }
   };
